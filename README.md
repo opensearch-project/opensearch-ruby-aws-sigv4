@@ -1,17 +1,19 @@
-## My Project
+- [OpenSearch AWS Sigv4 Client](#opensearch-aws-sigv4-client)
+  - [Compatibility](#compatibility)
+  - [User Guide](#user-guide)
+  - [License](#license)
+# OpenSearch AWS Sigv4 Client
 
-TODO: Fill this README out!
+The `opensearch-aws-sigv4` library provides an AWS Sigv4 client for connecting to [Amazon OpenSearch Service](https://docs.aws.amazon.com/opensearch-service/index.html).
 
-Be sure to:
+## Compatibility
 
-* Change the title in this README
-* Edit your repository description on GitHub
+See [COMPATIBILITY](../COMPATIBILITY.md).
 
-## Security
+## User Guide
 
-See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+See [USER_GUIDE](USER_GUIDE.md).
 
 ## License
 
-This project is licensed under the Apache-2.0 License.
-
+This software is licensed under the [Apache 2 license](./LICENSE).
