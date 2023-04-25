@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
+
+require 'opensearch-aws-sigv4'
+require 'aws-sigv4'
+
+begin
+  require 'pry'
+  Pry.start
+rescue LoadError
+  require 'irb'
+  IRB.start
+end
