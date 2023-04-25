@@ -7,10 +7,12 @@
 # Modifications Copyright OpenSearch Contributors. See
 # GitHub history for details.
 
+# frozen_string_literal: true
+
 module OpenSearch
   module Aws
     module Sigv4
-      VERSION = '1.2.0'.freeze
+      VERSION = '1.2.0'
     end
   end
 end

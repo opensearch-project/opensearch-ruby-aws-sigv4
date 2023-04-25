@@ -7,6 +7,8 @@
 # Modifications Copyright OpenSearch Contributors. See
 # GitHub history for details.
 
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 # Specify your gem's dependencies in opensearch-aws-sigv4.gemspec
@@ -16,6 +18,12 @@ gem 'bundler', '~> 2'
 gem 'rake', '~> 13'
 gem 'yard', '~> 0.9'
 
+gem 'rubocop', '~> 1.28'
+gem 'rubocop-rake', '~> 0.6'
+gem 'rubocop-rspec', '~> 2.10'
+
 gem 'rspec', '~> 3'
 gem 'simplecov', '~> 0.22'
 gem 'timecop', '~> 0.9'
+
+gem 'pry', '~> 0.14'

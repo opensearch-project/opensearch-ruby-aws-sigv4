@@ -7,6 +7,8 @@
 # Modifications Copyright OpenSearch Contributors. See
 # GitHub history for details.
 
+# frozen_string_literal: true
+
 require 'bundler/gem_tasks'
 
 task(:default) { system 'rake --tasks' }

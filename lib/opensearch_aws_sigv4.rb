@@ -7,6 +7,8 @@
 # Modifications Copyright OpenSearch Contributors. See
 # GitHub history for details.
 
+# frozen_string_literal: true
+
 require 'opensearch-ruby'
 require 'aws-sigv4/signer'
 require 'faraday'
@@ -41,7 +43,7 @@ module OpenSearch
       # @param [Aws::Sigv4::Signer] sigv4_signer an instance of AWS Sigv4 Signer.
       # @param [Hash] options
       # @option options [Boolean] :sigv4_debug whether to log debug info for Sigv4 Signing
-      def initialize(transport_args = {}, sigv4_signer, options: {}, &block)
+      def initialize(transport_args, sigv4_signer, options: {}, &block)
         unless sigv4_signer.is_a?(::Aws::Sigv4::Signer)
           raise ArgumentError, "Please pass a Aws::Sigv4::Signer. A #{sigv4_signer.class} was given."
         end
@@ -75,7 +77,7 @@ module OpenSearch
 
       def signature_url(path, params)
         host = @transport.transport.hosts.dig(0, :host)
-        path = '/' + path unless path.start_with?('/')
+        path = "/#{path}" unless path.start_with?('/')
         query_string = params.empty? ? '' : Faraday::Utils::ParamsHash[params].to_query.to_s
         URI::HTTP.build(host: host, path: path, query: query_string)
       end
@@ -98,7 +100,7 @@ module OpenSearch
 
         require 'logger'
         @logger = Logger.new(
-          STDOUT,
+          $stdout,
           progname: 'Sigv4',
           formatter: proc { |_severity, datetime, progname, msg| "\e[34m(#{datetime})  #{progname} - #{msg}\e[0m\n\n" }
         )

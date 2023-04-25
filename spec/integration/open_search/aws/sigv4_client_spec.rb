@@ -7,7 +7,9 @@
 # Modifications Copyright OpenSearch Contributors. See
 # GitHub history for details.
 
-require_relative '../spec_helper'
+# frozen_string_literal: true
+
+require_relative '../../../spec_helper'
 require 'logger'
 require 'aws-sigv4'
 
@@ -18,7 +20,7 @@ describe OpenSearch::Aws::Sigv4Client do
                                     access_key_id: 'key_id',
                                     secret_access_key: 'secret')
 
-    OpenSearch::Aws::Sigv4Client.new({ host: OPENSEARCH_URL, logger: Logger.new($stdout) }, signer)
+    described_class.new({ host: OPENSEARCH_URL, logger: Logger.new($stdout) }, signer)
   end
 
   it 'performs API actions without throwing any errors' do

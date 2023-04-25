@@ -7,7 +7,9 @@
 # Modifications Copyright OpenSearch Contributors. See
 # GitHub history for details.
 
-require_relative '../spec_helper'
+# frozen_string_literal: true
+
+require_relative '../../../spec_helper'
 require 'aws-sigv4'
 require 'timecop'
 
@@ -46,9 +48,9 @@ describe OpenSearch::Aws::Sigv4Client do
   describe '#perform_request' do
     let(:response) { { body: 'Response Body' } }
     let(:transport_double) do
-      _double = instance_double(OpenSearch::Transport::Client, perform_request: response)
-      _double.stub_chain(:transport, :hosts, :dig).and_return('localhost')
-      _double
+      double = instance_double(OpenSearch::Transport::Client, perform_request: response)
+      allow(double).to receive_message_chain(:transport, :hosts, :dig).and_return('localhost')
+      double
     end
     let(:signed_headers) do
       { 'authorization' => 'AWS4-HMAC-SHA256 Credential=key_id/20220101/us-west-2/es/aws4_request, '\
@@ -73,8 +75,9 @@ describe OpenSearch::Aws::Sigv4Client do
     end
 
     it 'skips the opensearch verification' do
-      expect(client).not_to receive(:open_search_validation_request)
+      allow(client).to receive(:open_search_validation_request)
       client.perform_request('GET', '/_stats', {}, '', {})
+      expect(client).not_to have_received(:open_search_validation_request)
     end
   end
 end

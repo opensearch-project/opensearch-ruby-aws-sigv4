@@ -1,0 +1,31 @@
+require:
+  - rubocop-rake
+  - rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 2.5
+  NewCops: enable
+
+RSpec/ImplicitExpect:
+  Enabled: false
+
+RSpec/ImplicitSubject:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MessageChain:
+  Enabled: false
+
+RSpec/SubjectStub:
+  Enabled: false
+
+Metrics:
+  Enabled: false
+
+Layout/HashAlignment:
+  Enabled: false
