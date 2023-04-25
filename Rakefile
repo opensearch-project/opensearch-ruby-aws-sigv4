@@ -36,8 +36,12 @@ namespace :test do
 end
 
 # ----- Documentation tasks ---------------------------------------------------
+desc 'Generate documentation to be published to gh-pages'
+task :gh_pages do
+  yard_cmd = 'yard doc --embed-mixins --markup=rdoc --output-dir docs ./docs lib/**/*.rb'
+  Kernel.system yard_cmd
 
-require 'yard'
-YARD::Rake::YardocTask.new(:doc) do |t|
-  t.options = %w[--embed-mixins --markup=markdown]
+  %w[OpenSearch.svg].each do |file|
+    cp file, './docs'
+  end
 end

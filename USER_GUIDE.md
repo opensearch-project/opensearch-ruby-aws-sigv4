@@ -2,6 +2,7 @@
   - [Setup](#setup)
   - [Usage](#usage)
     - [Amazon OpenSearch Service](#amazon-opensearch-service)
+    - [Enable Sigv4 Debug Logging](#enable-sigv4-debug-logging)
 # User Guide
 ## Setup
 
@@ -56,4 +57,40 @@ client.delete(index: index, id: '1')
 
 # delete the index
 client.indices.delete(index: index)
+```
+
+### Enable Sigv4 Debug Logging
+If you run into credentials errors, usually from expired session, set the `sigv4_debug` option to `true` when creating the client to print out the Sigv4 Signing Debug information.
+
+```ruby
+client = OpenSearch::Aws::Sigv4Client.new({
+    host: 'https://your.amz-managed-opensearch.domain',
+}, signer, sigv4_debug: true)
+
+client.info
+```
+
+```shell
+(2023-04-25 11:02:59 -0600)  Sigv4 - STRING TO SIGN: 
+AWS4-HMAC-SHA256
+20230425T170259Z
+20230425/us-east-1/aoss/aws4_request
+0e20bdc5eda484f2b0e65f8a33514c48471500da91b1f0c8bb6b86770b5dc6c4
+
+(2023-04-25 11:02:59 -0600)  Sigv4 - CANONICAL REQUEST:
+GET
+/
+
+host:your.amz-managed-opensearch.domain
+x-amz-content-sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+x-amz-date:20230425T170259Z
+
+host;x-amz-content-sha256;x-amz-date
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+(2023-04-25 11:02:59 -0600)  Sigv4 - SIGNATURE HEADERS:
+{"host"=>"your.amz-managed-opensearch.domain", 
+"x-amz-date"=>"20230425T170259Z", 
+"x-amz-content-sha256"=>"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", 
+"authorization"=>"AWS4-HMAC-SHA256 Credential=ABCDEFGH/20230425/us-east-1/aoss/aws4_request, SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=858f171c834231ae3c885c670217f94c68f010e85c50b0ad095444966fb5df0c"}
 ```
