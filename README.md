@@ -12,8 +12,8 @@ The `opensearch-aws-sigv4` library is compatible with all versions of `opensearc
 
 ## User Guide
 
-See [USER_GUIDE](https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/blob/main/USER_GUIDE.md).
+See [USER_GUIDE](USER_GUIDE.md).
 
 ## License
 
-This software is licensed under the [Apache 2 license](https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/blob/main/LICENCE).
+This software is licensed under the [Apache 2 license](LICENSE).
