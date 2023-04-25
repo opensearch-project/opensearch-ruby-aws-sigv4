@@ -21,7 +21,7 @@ jobs:
         ruby: [ 2.5, 2.6, 2.7, '3.0', 3.1, 3.2, jruby-9.3 ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Increase system limits
         run: |
           sudo swapoff -a
@@ -40,85 +40,5 @@ jobs:
           sudo apt-get update
           sudo apt-get install libcurl4-openssl-dev
           ruby -v
-          rake bundle:clean
-          rake bundle:install
-      - name: opensearch-ruby
-        run: cd opensearch-ruby && bundle exec rake test:all
-      - name: opensearch-transport
-        run: cd opensearch-transport && bundle exec rake test:all
-      - name: opensearch-api
-        run: cd opensearch-api && bundle exec rake test:spec
-      - name: opensearch-dsl
-        run: cd opensearch-dsl && bundle exec rake test:all
-      - name: opensearch-aws-sigv4
-        run: cd opensearch-aws-sigv4 && bundle exec rake test:all
-
-  test-opensearch-faraday-1:
-    env:
-      TEST_OPENSEARCH_SERVER: http://localhost:9250
-      PORT: 9250
-      FARADAY_VERSION: '~> 1.0'
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby: [ 2.6, 2.7, '3.0', 3.1, 3.2, jruby-9.3 ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Increase system limits
-        run: |
-          sudo swapoff -a
-          sudo sysctl -w vm.swappiness=1
-          sudo sysctl -w fs.file-max=262144
-          sudo sysctl -w vm.max_map_count=262144
-      - uses: ./.github/actions/opensearch
-        with:
-          cluster-version: latest
-          disable-security: true
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ matrix.ruby }}
-      - name: Build and test with Rake
-        run: |
-          sudo apt-get update
-          sudo apt-get install libcurl4-openssl-dev
-          ruby -v
-          rake bundle:clean
-          rake bundle:install
-      - name: opensearch-transport
-        run: cd opensearch-transport && bundle exec rake test:all
-
-  test-opensearch-security:
-    env:
-      TEST_OPENSEARCH_SERVER: https://admin:admin@localhost:9200
-      PORT: 9200
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby: [ 2.5, 2.6, 2.7, '3.0', 3.1, 3.2, jruby-9.3 ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Increase system limits
-        run: |
-          sudo swapoff -a
-          sudo sysctl -w vm.swappiness=1
-          sudo sysctl -w fs.file-max=262144
-          sudo sysctl -w vm.max_map_count=262144
-      - uses: ./.github/actions/opensearch
-        with:
-          cluster-version: latest
-          disable-security: false
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ matrix.ruby }}
-      - name: Build and test with Rake
-        run: |
-          sudo apt-get update
-          sudo apt-get install libcurl4-openssl-dev
-          sudo apt-get install ca-certificates
-          ruby -v
-          rake bundle:clean
-          rake bundle:install
-      - name: opensearch-ruby
-        run: cd opensearch-ruby && bundle exec rake test_security:all
+          bundle install
+          rake test:all
