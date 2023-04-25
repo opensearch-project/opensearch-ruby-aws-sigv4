@@ -16,8 +16,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install libcurl4-openssl-dev
-          rake bundle:clean
-          rake bundle:install
+          bundle install
       - name: Generate Docs
         run: rake gh_pages
       - name: Commit Docs Change
