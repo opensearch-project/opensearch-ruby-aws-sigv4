@@ -3,7 +3,8 @@
     "configMode": "AUTO",
     "configExternalURL": "",
     "projectToken": "",
-    "baseBranches": []
+    "baseBranches": [],
+    "exclusions": ["/docs"],
   },
   "scanSettingsSAST": {
     "enableScan": false,
