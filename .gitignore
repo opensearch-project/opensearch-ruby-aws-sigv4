@@ -9,20 +9,19 @@
 
 *.gem
 *.rbc
+artifacts.tar.gz
 .bundle
 .config
 .yardoc
 .ruby-version
 .idea/
+dist/
 Gemfile.lock
 InstalledFiles
 _yardoc
 coverage
 docs/
-lib/bundler/man
 pkg
 rdoc
 spec/reports
-test/tmp
-test/version_tmp
 tmp
