@@ -4,7 +4,7 @@
     "configExternalURL": "",
     "projectToken": "",
     "baseBranches": [],
-    "exclusions": ["/docs"],
+    "exclusions": ["/docs"]
   },
   "scanSettingsSAST": {
     "enableScan": false,
