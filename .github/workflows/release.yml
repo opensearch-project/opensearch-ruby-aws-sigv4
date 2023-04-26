@@ -1,0 +1,49 @@
+name: Draft Release
+
+on:
+  push:
+    tags:
+      - "*/*"
+
+jobs:
+  draft_release:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      issues: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - id: get_approvers
+        run: |
+          echo "approvers=$(cat .github/CODEOWNERS | grep @ | tr -d '* ' | sed 's/@/,/g' | sed 's/,//1')" >> $GITHUB_OUTPUT
+      - uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: ${{ steps.get_approvers.outputs.approvers }}
+          minimum-approvals: 2
+          issue-title: "Release ${{ github.ref_name }}"
+          issue-body: "Please approve or deny the release **TAG**: ${{ github.ref_name }}  **COMMIT**: ${{ github.sha }}"
+          exclude-workflow-initiator-as-approver: true
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.GET_SECRET_IAM_ROLE }}
+          aws-region: us-east-1
+      - name: Download signing key
+        run: |
+          aws secretsmanager get-secret-value --secret-id jenkins-opensearchproject-rubygems-private-key --query SecretString --output text > gem-private_key.pem
+      - name: Build and package gem artifact
+        run: . release/build.sh $(echo ${{ github.ref_name }} | awk -F/ '{print $1}')
+      - name: Draft a release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          generate_release_notes: true
+          files: |
+            artifacts.tar.gz
