@@ -1,3 +1,4 @@
+#!/bin/bash
 # SPDX-License-Identifier: Apache-2.0
 #
 # The OpenSearch Contributors require contributions made to
@@ -7,21 +8,11 @@
 # Modifications Copyright OpenSearch Contributors. See
 # GitHub history for details.
 
-*.gem
-*.rbc
-artifacts.tar.gz
-.bundle
-.config
-.yardoc
-.ruby-version
-.idea/
-dist/
-Gemfile.lock
-InstalledFiles
-_yardoc
-coverage
-docs/
-pkg
-rdoc
-spec/reports
-tmp
+set -e
+GIT_ROOT=$(git rev-parse --show-toplevel)
+
+rm -rf dist && mkdir dist
+gem build
+mv -v ./*.gem dist
+tar -vczf "$GIT_ROOT/artifacts.tar.gz" dist
+cd "$GIT_ROOT"

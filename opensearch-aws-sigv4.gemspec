@@ -42,10 +42,10 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files  = %w[README.md USER_GUIDE.md LICENSE]
   s.rdoc_options      = ['--charset=UTF-8']
 
-  signing_key_path = File.expand_path('gem-private_key.pem')
-  if $PROGRAM_NAME.end_with?('gem') && ARGV == ['build', __FILE__] && File.exist?(signing_key_path)
-    s.signing_key = signing_key_path
-    s.cert_chain  = ['certs/opensearch-rubygems.pem']
+  signing_key = File.expand_path('gem-private_key.pem')
+  if $PROGRAM_NAME.end_with?('gem') && ARGV == ['build', __FILE__] && File.exist?(signing_key)
+    s.signing_key = signing_key
+    s.cert_chain  = ['.github/opensearch-rubygems.pem']
   end
 
   s.required_ruby_version = '>= 2.5'
