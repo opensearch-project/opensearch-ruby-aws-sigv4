@@ -39,7 +39,7 @@ jobs:
         run: |
           aws secretsmanager get-secret-value --secret-id jenkins-opensearchproject-rubygems-private-key --query SecretString --output text > gem-private_key.pem
       - name: Build and package gem artifact
-        run: . .github/build_gem.sh
+        run: source .github/build_gem.sh
       - name: Draft a release
         uses: softprops/action-gh-release@v1
         with:
