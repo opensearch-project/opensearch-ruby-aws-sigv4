@@ -4,6 +4,7 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## [Unreleased]
 ### Added
 ### Changed
+- Add compatibility with Ruby 2.4 ([#21](https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/pull/21))
 ### Deprecated
 ### Removed
 ### Fixed
