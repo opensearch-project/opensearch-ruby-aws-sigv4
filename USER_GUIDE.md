@@ -23,7 +23,7 @@ bundle install
 
 ## Usage
 
-This library is an AWS Sigv4 wrapper for [`opensearch-ruby`](https://github.com/opensearch-project/opensearch-ruby/tree/main/opensearch-ruby), which is a Ruby client for OpenSearch. The `OpenSearch::Aws::Sigv4Client`, therefore, has all features of `OpenSearch::Client`.
+This library is an AWS Sigv4 wrapper for [`opensearch-ruby`](https://github.com/opensearch-project/opensearch-ruby/tree/main), which is a Ruby client for OpenSearch. The `OpenSearch::Aws::Sigv4Client`, therefore, has all features of `OpenSearch::Client`.
 
 ### Amazon OpenSearch Service
 To sign requests for the Amazon OpenSearch Service:
