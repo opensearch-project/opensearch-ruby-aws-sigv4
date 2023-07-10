@@ -29,7 +29,7 @@ This library is an AWS Sigv4 wrapper for [`opensearch-ruby`](https://github.com/
 To sign requests for the Amazon OpenSearch Service:
 
 ```ruby
-require 'opensearch-aws-sigv4'
+require 'opensearch_aws_sigv4'
 require 'aws-sigv4'
 
 signer = Aws::Sigv4::Signer.new(service: 'es', # signing service name, use "aoss" for OpenSearch Serverless
