@@ -1,3 +1,4 @@
+# rubocop:disable Naming/FileName
 # SPDX-License-Identifier: Apache-2.0
 #
 # The OpenSearch Contributors require contributions made to
@@ -108,3 +109,4 @@ module OpenSearch
     end
   end
 end
+# rubocop:enable Naming/FileName
