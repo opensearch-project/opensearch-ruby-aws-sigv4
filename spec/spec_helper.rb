@@ -9,7 +9,7 @@
 
 # frozen_string_literal: true
 
-require_relative '../lib/opensearch_aws_sigv4'
+require_relative '../lib/opensearch-aws-sigv4'
 require 'rspec'
 
 OPENSEARCH_URL = ENV.fetch('TEST_OPENSEARCH_SERVER', nil) || "http://localhost:#{ENV.fetch('PORT', nil) || 9200}"
