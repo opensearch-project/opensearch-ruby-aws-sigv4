@@ -79,5 +79,23 @@ describe OpenSearch::Aws::Sigv4Client do
       client.perform_request('GET', '/_stats', {}, '', {})
       expect(client).not_to have_received(:open_search_validation_request)
     end
+
+    it 'passes the same body to sign_request and super' do
+      body = {
+        char_filter: {
+          test: {
+            type: "mapping",
+            mappings: [ "’ => '" ]
+          }
+        }
+      }
+      signature_body = body.to_json
+
+      expect(signer).to receive(:sign_request).with(a_hash_including(body: signature_body)).and_call_original
+
+      expect(transport_double).to receive(:perform_request).with('GET', '/', {}, signature_body, kind_of(Hash))
+
+      client.perform_request('GET', '/', {}, body, {})
+    end
   end
 end
