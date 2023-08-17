@@ -67,7 +67,7 @@ module OpenSearch
         headers = (headers || {}).merge(signature.headers)
 
         log_signature_info(signature)
-        super(method, path, params, body, headers)
+        super(method, path, params, signature_body, headers)
       end
 
       private

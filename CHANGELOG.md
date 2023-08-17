@@ -8,6 +8,7 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Deprecated
 ### Removed
 ### Fixed
+- Pass exact signed body to perform_request to prevent Sigv4 mismatch ([#24](https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/pull/24))
 ### Security
 
 ## [1.2.0]
