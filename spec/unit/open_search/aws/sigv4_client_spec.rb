@@ -84,18 +84,18 @@ describe OpenSearch::Aws::Sigv4Client do
       body = {
         char_filter: {
           test: {
-            type: "mapping",
-            mappings: [ "’ => '" ]
+            type: 'mapping',
+            mappings: ["’ => '"]
           }
         }
       }
       signature_body = body.to_json
 
-      expect(signer).to receive(:sign_request).with(a_hash_including(body: signature_body)).and_call_original
-
-      expect(transport_double).to receive(:perform_request).with('GET', '/', {}, signature_body, kind_of(Hash))
+      allow(signer).to receive(:sign_request).with(a_hash_including(body: signature_body)).and_call_original
 
       client.perform_request('GET', '/', {}, body, {})
+
+      expect(transport_double).to have_received(:perform_request).with('GET', '/', {}, signature_body, kind_of(Hash))
     end
   end
 end
