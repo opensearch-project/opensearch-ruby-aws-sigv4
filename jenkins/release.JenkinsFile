@@ -4,7 +4,7 @@ lib = library(identifier: 'jenkins@1.4.2', retriever: modernSCM([
 ]))
 
 standardReleasePipelineWithGenericTrigger(
-    tokenIdCredential: 'jenkins-opensearch-ruby-generic-webhook-token',
+    tokenIdCredential: 'jenkins-opensearch-ruby-aws-sigv4-generic-webhook-token',
     causeString: 'A tag was cut on opensearch-project/opensearch-ruby repository causing this workflow to run',
     downloadReleaseAsset: true,
     publishRelease: true) {
