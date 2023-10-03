@@ -41,7 +41,7 @@ jobs:
       - name: Build and package gem artifact
         run: |
           gem build opensearch-aws-sigv4.gemspec
-          mkdir dist && mv opensearch-ruby-*.gem dist/
+          mkdir dist && mv *.gem dist/
           tar -cvf artifacts.tar.gz dist
       - name: Draft a release
         uses: softprops/action-gh-release@v1
