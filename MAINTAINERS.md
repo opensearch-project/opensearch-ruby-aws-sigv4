@@ -8,10 +8,13 @@ This document contains a list of maintainers in this repo. See [opensearch-proje
 | ----------------------- | ----------------------------------------------- | ----------- |
 | Vijayan Balasubramanian | [VijayanB](https://github.com/VijayanB)         | Amazon      |
 | Jayesh Hathila          | [jayeshathila](https://github.com/jayeshathila) | Amazon      |
-| Rob Sears               | [robsears](https://github.com/robsears)         | Bonsai      |
 | Vamshi Vijay Nakkirtha  | [vamshin](https://github.com/vamshin)           | Amazon      |
 | Daniel Doubrovkine      | [dblock](https://github.com/dblock)             | Amazon      |
 | Vacha Shah              | [VachaShah](https://github.com/VachaShah)       | Amazon      |
 | Theo Truong             | [nhtruong](https://github.com/nhtruong)         | Amazon      |
 | Harsha Vamsi Kalluri    | [harshavamsi](https://github.com/harshavamsi)   | Amazon      |
 
+## Emeritus
+| Maintainer              | GitHub ID                                       | Affiliation |
+| ----------------------- | ----------------------------------------------- | ----------- |
+| Rob Sears               | [robsears](https://github.com/robsears)         | Bonsai      |
