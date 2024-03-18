@@ -16,7 +16,7 @@ gemspec
 
 gem 'bundler', '~> 2'
 gem 'rake', '~> 13'
-gem 'yard', '~> 0.9'
+gem 'yard', '~> 0.9', '>= 0.9.35'
 
 if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.4') && Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.5')
   gem 'rubocop', '~> 1.12.1'
