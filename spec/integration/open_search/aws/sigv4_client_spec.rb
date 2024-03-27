@@ -21,7 +21,7 @@ describe OpenSearch::Aws::Sigv4Client do
                                     secret_access_key: 'secret')
 
     described_class.new({
-                          host: 'http://localhost:9200',
+                          host: 'http://localhost:9250',
                           user: 'admin',
                           password: 'myStrongPassword123!',
                           logger: Logger.new($stdout),
