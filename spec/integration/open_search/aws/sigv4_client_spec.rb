@@ -20,7 +20,14 @@ describe OpenSearch::Aws::Sigv4Client do
                                     access_key_id: 'key_id',
                                     secret_access_key: 'secret')
 
-    described_class.new({ host: OPENSEARCH_URL, logger: Logger.new($stdout) }, signer)
+    described_class.new({
+                          host: 'http://localhost:9250',
+                          user: 'admin',
+                          password: 'myStrongPassword123!',
+                          logger: Logger.new($stdout),
+                          transport_options: { ssl: { verify: false } }
+                        },
+                        signer)
   end
 
   it 'performs API actions without throwing any errors' do
