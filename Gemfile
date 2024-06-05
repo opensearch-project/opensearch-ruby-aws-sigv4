@@ -21,7 +21,7 @@ gem 'yard', '~> 0.9', '>= 0.9.35'
 if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.4') && Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.5')
   gem 'rubocop', '~> 1.12.1'
   gem 'rubocop-rake', '~> 0.5.1'
-  gem 'rubocop-rspec', '~> 2.2.0'
+  gem 'rubocop-rspec', '~> 2'
   gem 'simplecov', '~> 0.18.5'
 else
   # We need to disable Bundler/DuplicatedGem only because of rubocop 1.12.1.
