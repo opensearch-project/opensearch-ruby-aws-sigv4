@@ -9,7 +9,7 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Removed
 ### Fixed
 ### Security
-
+- Upgraded `rubocop-rspec` to the latest 2.x version to resolve CVE in its rexml dependency ([#42](https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/pull/42))
 ---
 
 ## 1.2.1
