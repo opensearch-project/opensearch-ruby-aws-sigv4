@@ -74,6 +74,12 @@ describe OpenSearch::Aws::Sigv4Client do
       expect(transport_double).to have_received(:perform_request).with('GET', '/', {}, '', signed_headers)
     end
 
+    it 'excludes the `ignore` param to make a signature' do
+      output = client.perform_request('GET', '/', { ignore: 404 }, '', {})
+      expect(output).to eq(response)
+      expect(transport_double).to have_received(:perform_request).with('GET', '/', { ignore: 404 }, '', signed_headers)
+    end
+
     it 'skips the opensearch verification' do
       allow(client).to receive(:open_search_validation_request)
       client.perform_request('GET', '/_stats', {}, '', {})
