@@ -5,6 +5,7 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Added
 ### Changed
 - Made CI workflows compatible with OS 2.12 and later. ([#40](https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/pull/40))
+- Exclude `ignore` param when creating SigV4 signatures. ([#46](https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/pull/46))
 ### Deprecated
 ### Removed
 ### Fixed
