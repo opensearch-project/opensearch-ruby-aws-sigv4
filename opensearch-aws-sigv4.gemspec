@@ -29,11 +29,11 @@ Gem::Specification.new do |s|
     'documentation_uri'     => 'https://rubydoc.info/gems/opensearch-aws-sigv4/OpenSearch/Aws/Sigv4Client',
     'source_code_uri'       => 'https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/tree/main',
     'bug_tracker_uri'       => 'https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/issues',
-    'changelog_uri'         => 'https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/blob/main/CHANGELOG.md'
+    'changelog_uri'         => 'https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/blob/main/CHANGELOG.md',
+'rubygems_mfa_required' => 'true'
   }
 
   s.files         = Dir['lib/**/*', '*.gemspec']
-  s.test_files    = Dir['spec/unit/**/*']
   s.require_paths = ['lib']
   s.bindir        = 'bin'
   s.executables   = 'opensearch_sigv4_console'
