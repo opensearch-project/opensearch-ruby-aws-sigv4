@@ -50,5 +50,5 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.4'
 
   s.add_dependency 'aws-sigv4', '>= 1'
-  s.add_dependency 'opensearch-ruby', '>= 1.0.1', '< 4.0'
+  s.add_dependency 'opensearch-ruby', '>= 4.0.0.pre.beta.1'
 end

@@ -20,7 +20,7 @@ describe OpenSearch::Aws::Sigv4Client do
                                     access_key_id: 'key_id',
                                     secret_access_key: 'secret')
 
-    described_class.new({ host: OPENSEARCH_URL, logger: Logger.new($stdout) }, signer)
+    described_class.new({ host: OPENSEARCH_URL, logger: Logger.new($stdout) }, signer, options: { sigv4_debug: true })
   end
 
   it 'performs API actions without throwing any errors' do
