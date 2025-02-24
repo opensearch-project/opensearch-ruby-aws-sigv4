@@ -12,7 +12,7 @@
 module OpenSearch
   module Aws
     module Sigv4
-      VERSION = '1.2.1'
+      VERSION = '1.3.0'
     end
   end
 end
