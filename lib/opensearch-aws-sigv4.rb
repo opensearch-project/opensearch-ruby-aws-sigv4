@@ -81,6 +81,7 @@ module OpenSearch
         path = "/#{path}" unless path.start_with?('/')
         params = params.clone
         params.delete(:ignore)
+        params.delete('ignore')
         query_string = params.empty? ? '' : Faraday::Utils::ParamsHash[params].to_query.to_s
         URI::HTTP.build(host: host, path: path, query: query_string)
       end
