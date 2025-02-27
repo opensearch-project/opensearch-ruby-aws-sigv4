@@ -17,6 +17,77 @@ require 'json'
 
 module OpenSearch
   module Aws
+    module Transport
+      # Extending OpenSearch::Transport::Client to sign requests with SigV4.
+      class Sigv4Client < ::OpenSearch::Transport::Client
+        attr_accessor :sigv4_signer
+
+        def initialize(transport_args, sigv4_signer, sigv4_debug, &block)
+          unless sigv4_signer.is_a?(::Aws::Sigv4::Signer)
+            raise ArgumentError, "Please pass a Aws::Sigv4::Signer. A #{sigv4_signer.class} was given."
+          end
+
+          super(transport_args, &block)
+          @sigv4_signer = sigv4_signer
+          @sigv4_debug = sigv4_debug
+          @logger = transport.logger
+        end
+
+        # @see ::OpenSearch::Transport::Client#perform_request
+        def perform_request(method, path, params = {}, body = nil, headers = nil)
+          signature_body = body.is_a?(Hash) ? body.to_json : body.to_s
+          signature = sigv4_signer.sign_request(
+            http_method: method,
+            url: signature_url(path, params),
+            headers: headers,
+            body: signature_body
+          )
+          headers = (headers || {}).merge(signature.headers)
+
+          log_signature_info(signature)
+          super(method, path, params, signature_body, headers)
+        end
+
+        private
+
+        def signature_url(path, params)
+          host = transport.hosts.dig(0, :host)
+          path = "/#{path}" unless path.start_with?('/')
+          params = params.clone
+          params.delete(:ignore)
+          params.delete('ignore')
+          query_string = params.empty? ? '' : Faraday::Utils::ParamsHash[params].to_query.to_s
+          URI::HTTP.build(host: host, path: path, query: query_string)
+        end
+
+        # @param [Aws::Sigv4::Signature] signature
+        def log_signature_info(signature)
+          return unless @sigv4_debug
+
+          log('string to sign', signature.string_to_sign)
+          log('canonical request', signature.canonical_request)
+          log('signature headers', signature.headers)
+        end
+
+        def log(title, message)
+          logger.debug("#{title.upcase}:\n\e[36m#{message}\e[0m")
+        end
+
+        def logger
+          return @logger if @logger
+
+          require 'logger'
+          @logger = Logger.new(
+            $stdout,
+            progname: 'Sigv4',
+            formatter: proc { |_severity, datetime, progname, msg|
+              "\e[34m(#{datetime})  #{progname} - #{msg}\e[0m\n\n"
+            }
+          )
+        end
+      end
+    end
+
     # AWS Sigv4 Wrapper for OpenSearch::Client.
     # This client accepts a Sigv4 Signer during initialization, and signs every request
     # with a Sigv4 Signature with the provided signer.
@@ -36,6 +107,7 @@ module OpenSearch
     #   puts client.cat.health
     #
     # @attr [Aws::Sigv4::Signer] sigv4_signer Signer used to sign every request
+    # rubocop:disable Lint/MissingSuper
     class Sigv4Client < ::OpenSearch::Client
       attr_accessor :sigv4_signer
 
@@ -44,71 +116,12 @@ module OpenSearch
       # @param [Aws::Sigv4::Signer] sigv4_signer an instance of AWS Sigv4 Signer.
       # @param [Hash] options
       # @option options [Boolean] :sigv4_debug whether to log debug info for Sigv4 Signing
+      # disable:rubocop Lint/MissingSuper
       def initialize(transport_args, sigv4_signer, options: {}, &block)
-        unless sigv4_signer.is_a?(::Aws::Sigv4::Signer)
-          raise ArgumentError, "Please pass a Aws::Sigv4::Signer. A #{sigv4_signer.class} was given."
-        end
-
-        @sigv4_signer = sigv4_signer
-        @sigv4_debug = options[:sigv4_debug]
-        @logger = nil
-        super(transport_args, &block)
+        @transport = OpenSearch::Aws::Transport::Sigv4Client.new(transport_args, sigv4_signer, options[:sigv4_debug],
+                                                                 &block)
       end
-
-      # @see OpenSearch::Transport::Transport::Base::perform_request
-      def perform_request(method, path, params = {}, body = nil, headers = nil)
-        signature_body = body.is_a?(Hash) ? body.to_json : body.to_s
-        signature = sigv4_signer.sign_request(
-          http_method: method,
-          url: signature_url(path, params),
-          headers: headers,
-          body: signature_body
-        )
-        headers = (headers || {}).merge(signature.headers)
-
-        log_signature_info(signature)
-        super(method, path, params, signature_body, headers)
-      end
-
-      private
-
-      def verify_open_search
-        @verified = true
-      end
-
-      def signature_url(path, params)
-        host = @transport.transport.hosts.dig(0, :host)
-        path = "/#{path}" unless path.start_with?('/')
-        params = params.clone
-        params.delete(:ignore)
-        params.delete('ignore')
-        query_string = params.empty? ? '' : Faraday::Utils::ParamsHash[params].to_query.to_s
-        URI::HTTP.build(host: host, path: path, query: query_string)
-      end
-
-      # @param [Aws::Sigv4::Signature] signature
-      def log_signature_info(signature)
-        return unless @sigv4_debug
-
-        log('string to sign', signature.string_to_sign)
-        log('canonical request', signature.canonical_request)
-        log('signature headers', signature.headers)
-      end
-
-      def log(title, message)
-        logger.debug("#{title.upcase}:\n\e[36m#{message}\e[0m")
-      end
-
-      def logger
-        return @logger if @logger
-
-        require 'logger'
-        @logger = Logger.new(
-          $stdout,
-          progname: 'Sigv4',
-          formatter: proc { |_severity, datetime, progname, msg| "\e[34m(#{datetime})  #{progname} - #{msg}\e[0m\n\n" }
-        )
-      end
+      # rubocop:enable Lint/MissingSuper
     end
   end
 end
