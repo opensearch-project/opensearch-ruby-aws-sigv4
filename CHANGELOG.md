@@ -4,6 +4,7 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## Unreleased
 ### Added
 ### Changed
+- Drop `opensearch-ruby < 4.0` support due to backward incompatibility
 ### Deprecated
 ### Removed
 ### Fixed
