@@ -25,11 +25,15 @@ describe OpenSearch::Aws::Sigv4Client do
 
   it 'performs API actions without throwing any errors' do
     expect do
+      expect(client.indices.exists(index: 'test-index')).to be false
+
       # Index a document
       client.index(index: 'test-index', id: '1', body: { title: 'Test' })
 
       # Refresh the index
       client.indices.refresh(index: 'test-index')
+
+      expect(client.indices.exists(index: 'test-index')).to be true
 
       # Search
       response = client.search(index: 'test-index', body: { query: { match: { title: 'test' } } })
