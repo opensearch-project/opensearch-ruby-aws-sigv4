@@ -27,8 +27,8 @@ else
   # We need to disable Bundler/DuplicatedGem only because of rubocop 1.12.1.
   # Rubocop 1.28 allows conditional declaration of gems.  See: https://docs.rubocop.org/rubocop/cops_bundler.html#bundlerduplicatedgem
   gem 'rubocop', '~> 1.28' # rubocop:disable Bundler/DuplicatedGem, Lint/RedundantCopDisableDirective
-  gem 'rubocop-rake', '~> 0.6' # rubocop:disable Bundler/DuplicatedGem, Lint/RedundantCopDisableDirective
-  gem 'rubocop-rspec', '~> 2.10' # rubocop:disable Bundler/DuplicatedGem, Lint/RedundantCopDisableDirective
+  gem 'rubocop-rake', '~> 0.7' # rubocop:disable Bundler/DuplicatedGem, Lint/RedundantCopDisableDirective
+  gem 'rubocop-rspec', '~> 3' # rubocop:disable Bundler/DuplicatedGem, Lint/RedundantCopDisableDirective
   gem 'simplecov', '~> 0.22' # rubocop:disable Bundler/DuplicatedGem, Lint/RedundantCopDisableDirective
 end
 
