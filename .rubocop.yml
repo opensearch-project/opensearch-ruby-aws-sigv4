@@ -3,7 +3,7 @@ require:
   - rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
   NewCops: enable
 
 RSpec/ImplicitExpect:
@@ -28,4 +28,7 @@ Metrics:
   Enabled: false
 
 Layout/HashAlignment:
+  Enabled: false
+
+Gemspec/RequireMFA:
   Enabled: false
