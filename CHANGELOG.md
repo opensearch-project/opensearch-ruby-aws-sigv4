@@ -15,6 +15,8 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Changed
 - Made CI workflows compatible with OS 2.12 and later. ([#40](https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/pull/40))
 - Exclude `ignore` param when creating SigV4 signatures. ([#46](https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/pull/46))
+### Removed
+- Removed support for ruby 2.4 ([58](https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/pull/58))
 ### Security
 - Upgraded `rubocop-rspec` to the latest 2.x version to resolve CVE in its rexml dependency ([#42](https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/pull/42))
 
