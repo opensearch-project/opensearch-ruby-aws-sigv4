@@ -13,6 +13,7 @@ jobs:
       contents: write
       issues: write
     steps:
+      - uses: .github/workflows/dry_release.yml
       - name: Checkout Repository
         uses: actions/checkout@v4
       - id: get_approvers

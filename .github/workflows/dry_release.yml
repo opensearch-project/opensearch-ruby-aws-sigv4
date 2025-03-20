@@ -1,0 +1,37 @@
+name: Build and Install Gem (Dry Run)
+on:
+  push: { branches: ["*"], paths-ignore: ['*.md'] }
+  pull_request: { branches: ["*"], paths-ignore: ['*.md'] }
+  schedule: [{ cron: '0 12 * * 0' }] # Every Sunday at 12:00 UTC
+  workflow_call: {}
+jobs:
+  test-gem-release:
+    env:
+      GEM_PRIVATE_KEY: .github/dummy.gem-private_key.pem
+      GEM_PUBLIC_CERT: .github/dummy.gem-public_cert.pem
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+          bundler: none
+      - name: Determine Ruby Version
+        run: |
+          set -x
+          min_ruby_version=$(ruby -e 'puts Gem::Specification.load("opensearch-aws-sigv4.gemspec").required_ruby_version.to_s.match(/\d+\.\d+/)[0]')
+          echo "RUBY_VERSION=$min_ruby_version" >> $GITHUB_ENV
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler: latest
+      - name: Build and Install Gem
+        run: |
+          gem build opensearch-aws-sigv4.gemspec
+          gem cert --add $GEM_PUBLIC_CERT
+          gem install faraday -v '~> 1'
+          gem install opensearch-aws-sigv4-*.gem
+          gem uninstall opensearch-aws-sigv4 -x
+          gem install opensearch-aws-sigv4-*.gem -P MediumSecurity
+          gem uninstall opensearch-aws-sigv4 -x
+          gem install opensearch-aws-sigv4-*.gem -P HighSecurity
