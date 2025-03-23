@@ -33,7 +33,6 @@ Gem::Specification.new do |s|
   }
 
   s.files         = Dir['lib/**/*', '*.gemspec']
-  s.test_files    = Dir['spec/unit/**/*']
   s.require_paths = ['lib']
   s.bindir        = 'bin'
   s.executables   = 'opensearch_sigv4_console'
@@ -41,14 +40,14 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files  = %w[README.md USER_GUIDE.md LICENSE]
   s.rdoc_options      = ['--charset=UTF-8']
 
-  signing_key = File.expand_path('gem-private_key.pem')
+  signing_key = File.expand_path(ENV.fetch('GEM_PRIVATE_KEY', 'gem-private_key.pem'))
   if $PROGRAM_NAME.end_with?('gem') && ARGV.first == 'build' && File.exist?(signing_key)
     s.signing_key = signing_key
-    s.cert_chain  = ['.github/opensearch-rubygems.pem']
+    s.cert_chain  = [ENV.fetch('GEM_PUBLIC_CERT', '.github/opensearch-rubygems.pem')]
   end
 
-  s.required_ruby_version = '>= 2.5'
+  s.required_ruby_version = '>= 2.6'
 
-  s.add_dependency 'aws-sigv4', '>= 1'
+  s.add_dependency 'aws-sigv4', '~> 1'
   s.add_dependency 'opensearch-ruby', '>= 1.0.1', '< 4.0'
 end

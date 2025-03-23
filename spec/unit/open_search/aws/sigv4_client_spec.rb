@@ -53,7 +53,7 @@ describe OpenSearch::Aws::Sigv4Client do
       double
     end
     let(:signed_headers) do
-      { 'authorization' => 'AWS4-HMAC-SHA256 Credential=key_id/20220101/us-west-2/es/aws4_request, '\
+      { 'authorization' => 'AWS4-HMAC-SHA256 Credential=key_id/20220101/us-west-2/es/aws4_request, ' \
                            'SignedHeaders=host;x-amz-content-sha256;x-amz-date, ' \
                            'Signature=9c4c690110483308f62a91c2ca873857750bca2607ba1aabdae0d2303950310a',
         'host' => 'localhost',
