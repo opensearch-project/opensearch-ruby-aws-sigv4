@@ -10,6 +10,7 @@ standardReleasePipelineWithGenericTrigger(
     publishRelease: true) {
         publishToRubyGems(
             publicCertPath: ".github/opensearch-rubygems.pem",
+            rubyVersion: "3.1.2",
             apiKeyCredentialId: 'jenkins-opensearch-aws-sigv4-api-key'
             )
     }
