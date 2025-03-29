@@ -4,6 +4,7 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## Unreleased
 ### Added
 ### Changed
+- [BC Break] No longer extending `OpenSearch::Client` from `opensearch-ruby` in favor of simply providing a SigV4 request signer as described in [this guide](https://github.com/opensearch-project/opensearch-ruby/blob/main/DEVELOPER_GUIDE.md#create-a-request-signer).
 ### Deprecated
 ### Removed
 ### Fixed
