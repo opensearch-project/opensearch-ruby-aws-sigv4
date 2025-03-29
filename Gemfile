@@ -24,3 +24,5 @@ gem 'rubocop-rspec', '~> 3'
 gem 'simplecov', '~> 0.22'
 gem 'timecop', '~> 0.9'
 gem 'yard', '~> 0.9', '>= 0.9.35'
+
+gem 'opensearch-ruby', '~> 4.0.0.pre.beta.3'
