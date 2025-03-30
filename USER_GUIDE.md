@@ -42,7 +42,7 @@ logger = Logger.new($stdout)
 client = OpenSearch::Client.new({
   host: 'https://your.amz-managed-opensearch.domain', # serverless endpoint for OpenSearch Serverless
   logger: logger,
-  request_signer: described_class.new(signer)
+  request_signer: OpenSearch::Aws::Sigv4RequestSigner.new(signer)
 })
 
 # create an index and document
