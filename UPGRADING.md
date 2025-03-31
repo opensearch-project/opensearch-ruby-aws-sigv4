@@ -25,3 +25,19 @@ client = OpenSearch::Client.new({
   host: 'https://your.amz-managed-opensearch.domain',
   request_signer: OpenSearch::Aws::Sigv4RequestSigner.new(signer)
 })
+```
+
+### Debug Logging
+Since 2.0, the client logs the contents of the signature at `debug` level using the `logger` passed to `OpenSearch::Client`.
+If you do not provide a logger, the client will use a default `debug`-level logger. To ensure safe logging in a production environment, explicitly pass a logger configured with a higher level (e.g. `INFO`):
+
+```ruby
+logger = Logger.new
+logger.level = Logger::INFO
+
+client = OpenSearch::Client.new({
+  host: 'https://your.amz-managed-opensearch.domain',
+  request_signer: OpenSearch::Aws::Sigv4RequestSigner.new(signer),
+  logger: logger
+})
+```

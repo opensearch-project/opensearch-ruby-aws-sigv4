@@ -89,3 +89,6 @@ I, [2025-03-31T20:32:24.398301 #77479]  INFO -- : Signing request with AWS SigV4
 D, [2025-03-31T20:32:24.399198 #77479] DEBUG -- : Signed headers with AWS SigV4: {"host" => "your.amz-managed-opensearch.domain", "x-amz-date" => "20250331T113224Z", "x-amz-content-sha256" => "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "authorization" => "AWS4-HMAC-SHA256 Credential=key_id/20250331/us-west-2/es/aws4_request, SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=57c69c2da9597c40625e2dbef3806bdfa0e9e50c99918d2ae10a264110352e51"}
 ...
 ```
+
+And since `opensearch-ruby` gem, a client will use a default `debug`-level logger if you do not provide a logger.
+To ensure safe logging in a production environment, explicitly pass a logger configured with a higher level \(e.g. `INFO`\).
