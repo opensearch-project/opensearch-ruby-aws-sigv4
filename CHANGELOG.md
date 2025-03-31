@@ -4,9 +4,10 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## Unreleased
 ### Added
 ### Changed
-- [BC Break] No longer extending `OpenSearch::Client` from `opensearch-ruby` in favor of simply providing a SigV4 request signer as described in [this guide](https://github.com/opensearch-project/opensearch-ruby/blob/main/DEVELOPER_GUIDE.md#create-a-request-signer).
+- Compatibility with opensearch-ruby 4.0
 ### Deprecated
 ### Removed
+- `OpenSearch::AWS::Sigv4Client` is removed. No longer extend `OpenSearch::Client` and use `OpenSearch::Aws::Sigv4RequestSigner` instead. (See [UPGRADING.md](UPGRADING.md))
 ### Fixed
 ### Security
 
