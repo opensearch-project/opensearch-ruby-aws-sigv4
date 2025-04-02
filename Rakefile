@@ -14,7 +14,7 @@ require 'bundler/gem_tasks'
 task(:default) { system 'rake --tasks' }
 
 desc 'Run unit tests'
-task test: 'test:spec'
+task test: 'test:unit'
 
 # ----- Test tasks ------------------------------------------------------------
 require 'rspec/core/rake_task'

@@ -14,22 +14,27 @@ require 'logger'
 require 'aws-sigv4'
 
 describe OpenSearch::Aws::Sigv4RequestSigner do
-  let(:client) do
-    signer = Aws::Sigv4::Signer.new(service: 'es',
-                                    region: 'us-west-2',
-                                    access_key_id: 'key_id',
-                                    secret_access_key: 'secret')
+  let(:logger) { Logger.new($stdout) }
 
-    logger = Logger.new($stdout)
-    OpenSearch::Client.new({
-                             host: OPENSEARCH_URL,
-                             logger: logger,
-                             request_signer: described_class.new(signer)
-                           })
+  let(:request_signer) do
+    described_class.new(
+      service: 'es',
+      region: 'us-west-2',
+      access_key_id: 'key_id',
+      secret_access_key: 'secret'
+    )
   end
 
-  it 'signs an API request without throwing any errors' do
-    expect do
+  context 'with a client' do
+    let(:client) do
+      OpenSearch::Client.new(
+        host: OPENSEARCH_URL,
+        logger: logger,
+        request_signer: request_signer
+      )
+    end
+
+    it 'signs an API request' do
       # Index a document
       client.index(index: 'test-index', id: '1', body: { title: 'Test' })
 
@@ -44,6 +49,6 @@ describe OpenSearch::Aws::Sigv4RequestSigner do
 
       # Delete the index
       client.indices.delete(index: 'test-index')
-    end.not_to raise_error
+    end
   end
 end

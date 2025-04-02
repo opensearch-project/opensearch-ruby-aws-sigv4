@@ -32,22 +32,30 @@ To sign requests for the Amazon OpenSearch Service:
 require 'opensearch-aws-sigv4'
 require 'aws-sigv4'
 
-signer = Aws::Sigv4::Signer.new(service: 'es', # signing service name, use "aoss" for OpenSearch Serverless
-                                region: 'us-west-2', # signing service region
-                                access_key_id: 'key_id',
-                                secret_access_key: 'secret')
+request_signer = OpenSearch::Aws::Sigv4RequestSigner.new(
+  service: 'es', # signing service name, use "aoss" for OpenSearch Serverless
+  region: 'us-west-2', # signing service region
+  access_key_id: 'key_id',
+  secret_access_key: 'secret'
+)
 
-client = OpenSearch::Client.new({
+client = OpenSearch::Client.new(
   host: 'https://your.amz-managed-opensearch.domain', # serverless endpoint for OpenSearch Serverless
-  request_signer: OpenSearch::Aws::Sigv4RequestSigner.new(signer)
-})
+  request_signer: request_signer
+)
 
 # create an index and document
 index = 'prime'
 client.indices.create(index: index)
-client.index(index: index, id: '1', body: { name: 'Amazon Echo', 
-                                            msrp: '5999', 
-                                            year: 2011 })
+client.index(
+  index: index,
+  id: '1',
+  body: {
+    name: 'Amazon Echo',
+    msrp: '5999',
+    year: 2011
+  }
+)
 
 # search for the document
 client.search(body: { query: { match: { name: 'Echo' } } })
@@ -60,26 +68,29 @@ client.indices.delete(index: index)
 ```
 
 ### Enable Sigv4 Debug Logging
+
 The `opensearch-aws-sigv4` gem outputs the contents of the signature at the `debug` level via the logger passed to the `OpenSearch::Client`.
 
 To inspect the actual signature content being generated for each request (e.g. for debugging purposes or troubleshooting), pass a logger configured with `DEBUG` level like this:
 
 ```ruby
-signer = Aws::Sigv4::Signer.new(service: 'es', # signing service name, use "aoss" for OpenSearch Serverless
-                                region: 'us-west-2', # signing service region
-                                access_key_id: 'key_id',
-                                secret_access_key: 'secret')
+request_signer = OpenSearch::Aws::Sigv4RequestSigner.new(
+  service: 'es', # signing service name, use "aoss" for OpenSearch Serverless
+  region: 'us-west-2', # signing service region
+  access_key_id: 'key_id',
+  secret_access_key: 'secret'
+)
 
 logger = Logger.new($stdout)
 logger.level = Logger::DEBUG
 
-client = OpenSearch::Client.new({
+client = OpenSearch::Client.new(
   host: 'https://your.amz-managed-opensearch.domain', # serverless endpoint for OpenSearch Serverless
   logger: logger,
-  request_signer: OpenSearch::Aws::Sigv4RequestSigner.new(signer)
-})
+  request_signer: request_signer
+)
 
-client.info
+puts client.info
 ```
 
 This will output log messages like this:
@@ -90,5 +101,4 @@ D, [2025-03-31T20:32:24.399198 #77479] DEBUG -- : Signed headers with AWS SigV4:
 ...
 ```
 
-And since `opensearch-ruby` gem, a client will use a default `debug`-level logger if you do not provide a logger.
-To ensure safe logging in a production environment, explicitly pass a logger configured with a higher level \(e.g. `INFO`\).
+By default, the signer will use the logger from the `opensearch-ruby` gem. To ensure safe logging in a production environment, make sure its level is set to `INFO` to avoid logging debug-level signed headers.
