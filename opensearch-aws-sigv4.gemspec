@@ -46,8 +46,7 @@ Gem::Specification.new do |s|
     s.cert_chain  = [ENV.fetch('GEM_PUBLIC_CERT', '.github/opensearch-rubygems.pem')]
   end
 
-  s.required_ruby_version = '>= 2.6'
+  s.required_ruby_version = '>= 3.0'
 
   s.add_dependency 'aws-sigv4', '~> 1'
-  s.add_dependency 'opensearch-ruby', '>= 1.0.1', '< 4.0'
 end

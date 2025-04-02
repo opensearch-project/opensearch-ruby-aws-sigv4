@@ -4,8 +4,10 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ## Unreleased
 ### Added
 ### Changed
+- Compatibility with opensearch-ruby 4.0
 ### Deprecated
 ### Removed
+- `OpenSearch::AWS::Sigv4Client` is removed. No longer extend `OpenSearch::Client` and use `OpenSearch::Aws::Sigv4RequestSigner` instead. (See [UPGRADING.md](UPGRADING.md))
 ### Fixed
 ### Security
 
