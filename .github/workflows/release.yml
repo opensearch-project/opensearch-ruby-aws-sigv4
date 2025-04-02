@@ -6,14 +6,18 @@ on:
       - "*"
 
 jobs:
+  dry_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/workflows/dry_release.yml
   draft_release:
+    needs: dry_release
     runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: write
       issues: write
     steps:
-      - uses: .github/workflows/dry_release.yml
       - name: Checkout Repository
         uses: actions/checkout@v4
       - id: get_approvers
