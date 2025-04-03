@@ -3,7 +3,6 @@ on:
   push: { branches: ["*"], paths-ignore: ['*.md'] }
   pull_request: { branches: ["*"], paths-ignore: ['*.md'] }
   schedule: [{ cron: '0 12 * * 0' }] # Every Sunday at 12:00 UTC
-  workflow_call: {}
 jobs:
   test-gem-release:
     env:
@@ -29,7 +28,6 @@ jobs:
         run: |
           gem build opensearch-aws-sigv4.gemspec
           gem cert --add $GEM_PUBLIC_CERT
-          gem install faraday -v '~> 1'
           gem install opensearch-aws-sigv4-*.gem
           gem uninstall opensearch-aws-sigv4 -x
           gem install opensearch-aws-sigv4-*.gem -P MediumSecurity
