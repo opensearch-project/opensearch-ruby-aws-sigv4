@@ -14,6 +14,7 @@ require 'opensearch-ruby'
 require 'aws-sigv4/signer'
 require 'faraday'
 require 'json'
+require 'forwardable'
 
 module OpenSearch
   module Aws
@@ -21,38 +22,49 @@ module OpenSearch
     #
     # @link https://github.com/opensearch-project/opensearch-ruby/blob/main/DEVELOPER_GUIDE.md#create-a-request-signer
     #
-    # @param [Aws::Sigv4::Signer] sigv4_signer Signer used to sign every request
+    # @param [Hash] options Signer options
+    # @option options [String] :service ('es') The AWS service name.
+    # @option options [String] :region The AWS region.
+    # @option options [String] :access_key_id The AWS access key ID.
+    # @option options [String] :secret_access_key The AWS secret access key.
+    # @option options [String] :session_token (optional) The AWS session token.
     #
     # @example
-    #   signer = Aws::Sigv4::Signer.new(service: 'es',
-    #                                   region: 'us-east-1',
-    #                                   access_key_id: '<access_key_id>',
-    #                                   secret_access_key: '<secret_access_key>',
-    #                                   session_token: '<session_token>')
     #   client = OpenSearch::Client.new({
     #     host: 'https://my-os-domain.us-east-1.es.amazonaws.com/',
-    #     request_signer: OpenSearch::Aws::Sigv4RequestSigner.new(signer)
+    #     request_signer: OpenSearch::Aws::Sigv4RequestSigner.new(
+    #       service: 'es',
+    #       region: 'us-east-1',
+    #       access_key_id: '<access_key_id>',
+    #       secret_access_key: '<secret_access_key>',
+    #       session_token: '<session_token>'
+    #     )
     #   })
     #
     #   puts client.cat.health
     class Sigv4RequestSigner
-      def initialize(sigv4_signer)
-        unless sigv4_signer.is_a?(::Aws::Sigv4::Signer)
-          raise ArgumentError, "Please pass a Aws::Sigv4::Signer. A #{sigv4_signer.class} was given."
-        end
+      extend Forwardable
 
-        @sigv4_signer = sigv4_signer
+      attr_reader :signer
+
+      def_delegators :@signer, :service, :region, :credentials_provider, :unsigned_headers, :apply_checksum_header
+
+      def initialize(options = {})
+        @signer = ::Aws::Sigv4::Signer.new({
+          service: 'es'
+        }.merge(options))
       end
 
       def sign_request(method:, path:, params:, body:, headers:, host:, port:, url:, logger:) # rubocop:disable Lint/UnusedMethodArgument
         logger&.info("Signing request with AWS SigV4: #{method} #{url}")
 
         signature_body = body.is_a?(Hash) ? body.to_json : body.to_s
-        signature = @sigv4_signer.sign_request(
+        signature = @signer.sign_request(
           http_method: method,
           url: url,
           headers: headers,
-          body: signature_body
+          body: signature_body,
+          logger: logger
         )
 
         signed_headers = signature.headers

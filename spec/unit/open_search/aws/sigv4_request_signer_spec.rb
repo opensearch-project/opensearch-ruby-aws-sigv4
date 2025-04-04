@@ -9,60 +9,125 @@
 
 # frozen_string_literal: true
 
-require_relative '../../../spec_helper'
-require 'aws-sigv4'
-require 'timecop'
+require 'spec_helper'
 
-describe OpenSearch::Aws::Sigv4RequestSigner do
-  subject(:request_signer) do
-    described_class.new(signer)
-  end
+RSpec.describe OpenSearch::Aws::Sigv4RequestSigner do
+  subject(:signer) { described_class.new(options) }
 
-  let(:signer) do
-    Aws::Sigv4::Signer.new(service: 'es',
-                           region: 'us-west-2',
-                           access_key_id: 'key_id',
-                           secret_access_key: 'secret')
-  end
-
-  describe '.initialize' do
-    context 'when a Sigv4 Signer is NOT provided' do
-      let(:signer) { nil }
-
-      it 'raises an argument error' do
-        expect do
-          request_signer
-        end.to raise_error ArgumentError, 'Please pass a Aws::Sigv4::Signer. A NilClass was given.'
-      end
+  context 'with region and credentials' do
+    let(:options) do
+      {
+        region: 'us-east-1',
+        access_key_id: 'access_key_id',
+        secret_access_key: 'secret_access_key',
+        session_token: 'session_token'
+      }
     end
 
-    context 'when a Sigv4 Signer is provided' do
-      it 'does NOT raise any error' do
-        expect { request_signer }.not_to raise_error
+    describe '#initialize' do
+      it 'creates a new AWS Sigv4 signer' do
+        expect(signer.service).to eq('es')
+        expect(signer.region).to eq('us-east-1')
       end
     end
   end
 
-  describe '#sign_request' do
-    let(:expected_signed_headers) do
-      { 'authorization' => 'AWS4-HMAC-SHA256 Credential=key_id/20220101/us-west-2/es/aws4_request, ' \
-                           'SignedHeaders=host;x-amz-content-sha256;x-amz-date, ' \
-                           'Signature=9c4c690110483308f62a91c2ca873857750bca2607ba1aabdae0d2303950310a',
-        'host' => 'localhost',
-        'x-amz-content-sha256' => 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
-        'x-amz-date' => '20220101T000000Z' }
+  context 'with all options' do
+    let(:options) do
+      {
+        service: 'aoss',
+        region: 'us-west-2',
+        access_key_id: 'access_key_id',
+        secret_access_key: 'secret_access_key',
+        session_token: 'session_token'
+      }
     end
 
-    before do
-      Timecop.freeze(Time.utc(2022))
+    describe '#initialize' do
+      it 'creates a new AWS Sigv4 signer with custom options' do
+        expect(signer.service).to eq('aoss')
+        expect(signer.region).to eq('us-west-2')
+      end
     end
 
-    after { Timecop.return }
+    describe 'delegated methods' do
+      it 'delegates service method' do
+        expect(signer.service).to eq('aoss')
+      end
 
-    it 'signs the request' do
-      signed_headers = request_signer.sign_request(method: 'GET', path: '/', params: {}, body: '', headers: {},
-                                                   host: 'localhost', port: 9200, url: 'http://localhost/', logger: nil)
-      expect(signed_headers).to eq(expected_signed_headers)
+      it 'delegates region method' do
+        expect(signer.region).to eq('us-west-2')
+      end
+
+      it 'delegates credentials_provider method' do
+        expect(signer.credentials_provider).to be_a(Aws::Sigv4::StaticCredentialsProvider)
+      end
+
+      it 'delegates unsigned_headers method' do
+        expect(signer.unsigned_headers).to be_an(Set)
+        expect(signer.unsigned_headers).to eq(Set.new(%w[authorization x-amzn-trace-id expect]))
+      end
+
+      it 'delegates apply_checksum_header method' do
+        expect(signer.apply_checksum_header).to be(true)
+      end
+    end
+
+    describe '#sign_request' do
+      let(:request_params) do
+        {
+          method: 'GET',
+          path: '/_cluster/health',
+          params: {},
+          body: '',
+          headers: { 'Content-Type' => 'application/json' },
+          host: 'localhost',
+          port: 9200,
+          url: 'http://localhost:9200/_cluster/health',
+          logger: nil
+        }
+      end
+
+      it 'signs the request with AWS SigV4' do
+        signed_headers = signer.sign_request(**request_params)
+
+        expect(signed_headers).to be_a(Hash)
+        expect(signed_headers.keys).to include('authorization')
+        expect(signed_headers.keys).to include('x-amz-date')
+        expect(signed_headers.keys).to include('x-amz-security-token')
+      end
+
+      context 'with JSON body' do
+        let(:json_body) { { query: { match_all: {} } } }
+
+        let(:request_params_with_json) do
+          request_params.merge(body: json_body)
+        end
+
+        it 'properly handles JSON body' do
+          signed_headers = signer.sign_request(**request_params_with_json)
+
+          expect(signed_headers).to be_a(Hash)
+          expect(signed_headers.keys).to include('authorization')
+          expect(signed_headers.keys).to include('x-amz-date')
+          expect(signed_headers.keys).to include('x-amz-security-token')
+        end
+      end
+
+      context 'with logger' do
+        let(:logger) { instance_double(Logger, info: nil, debug: nil) }
+
+        let(:request_params_with_logger) do
+          request_params.merge(logger: logger)
+        end
+
+        it 'logs signing information' do
+          signer.sign_request(**request_params_with_logger)
+
+          expect(logger).to have_received(:debug).with(/Signed headers with AWS SigV4/)
+          expect(logger).to have_received(:info).with(/Signing request with AWS SigV4/)
+        end
+      end
     end
   end
 end

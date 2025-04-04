@@ -32,3 +32,6 @@ Layout/HashAlignment:
 
 Gemspec/RequireMFA:
   Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
