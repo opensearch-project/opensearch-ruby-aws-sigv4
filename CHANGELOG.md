@@ -5,6 +5,7 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Added
 - Add compatibility with opensearch-ruby 4.0.
 ### Changed
+- Update rubygems public key setting expiry to 20260707 ([#70](https://github.com/opensearch-project/opensearch-ruby-aws-sigv4/pull/70))
 ### Deprecated
 ### Removed
 - The `OpenSearch::AWS::Sigv4Client` class has been removed and will no longer extend `OpenSearch::Client`, use `OpenSearch::Aws::Sigv4RequestSigner` instead. See [UPGRADING.md](UPGRADING.md).
