@@ -12,8 +12,8 @@ jobs:
       GEM_PUBLIC_CERT: .github/dummy.gem-public_cert.pem
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1
         with:
           ruby-version: 2.6
           bundler: none
@@ -22,7 +22,7 @@ jobs:
           set -x
           min_ruby_version=$(ruby -e 'puts Gem::Specification.load("opensearch-aws-sigv4.gemspec").required_ruby_version.to_s.match(/\d+\.\d+/)[0]')
           echo "RUBY_VERSION=$min_ruby_version" >> $GITHUB_ENV
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler: latest
@@ -45,11 +45,11 @@ jobs:
       issues: write
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - id: get_approvers
         run: |
           echo "approvers=$(cat .github/CODEOWNERS | grep @ | tr -d '* ' | sed 's/@/,/g' | sed 's/,//1')" >> $GITHUB_OUTPUT
-      - uses: trstringer/manual-approval@v1
+      - uses: trstringer/manual-approval@74d99dff7380e3e4b122d4ededcbca2b6ce59367 # v1
         with:
           secret: ${{ github.TOKEN }}
           approvers: ${{ steps.get_approvers.outputs.approvers }}
@@ -59,11 +59,11 @@ jobs:
           The release pipeline for this gem can be found at https://build.ci.opensearch.org/blue/organizations/jenkins/release-opensearch-ruby-aws-sigv4/activity"
           exclude-workflow-initiator-as-approver: true
       - name: Install Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1
         with:
           ruby-version: 3.1
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838 # v1
         with:
           role-to-assume: ${{ secrets.GET_SECRET_IAM_ROLE }}
           aws-region: us-east-1
@@ -76,7 +76,7 @@ jobs:
           mkdir dist && mv *.gem dist/
           tar -cvf artifacts.tar.gz dist
       - name: Draft a release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1
         with:
           draft: true
           generate_release_notes: true

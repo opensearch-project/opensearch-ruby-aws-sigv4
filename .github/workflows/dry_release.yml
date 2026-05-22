@@ -10,8 +10,8 @@ jobs:
       GEM_PUBLIC_CERT: .github/dummy.gem-public_cert.pem
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1
         with:
           ruby-version: 2.6
           bundler: none
@@ -20,7 +20,7 @@ jobs:
           set -x
           min_ruby_version=$(ruby -e 'puts Gem::Specification.load("opensearch-aws-sigv4.gemspec").required_ruby_version.to_s.match(/\d+\.\d+/)[0]')
           echo "RUBY_VERSION=$min_ruby_version" >> $GITHUB_ENV
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f # v1
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler: latest
